@@ -302,7 +302,7 @@
                 aElm_img = elem.querySelectorAll('img.octicon.octicon-file, img.color-fg-muted')
                 ;
             aElm_new.forEach(el=>{el.style.cssText = 'display: none'});
-            if(aElm_img){
+            if(aElm_img.length>0){
                 aElm_img.forEach(el=>{el.style.cssText = 'display: inline'});
             }else{
                 aElm_now.forEach(el=>{el.style.cssText = 'display: inline'});
@@ -368,7 +368,7 @@
                 aElm_img = elem.querySelectorAll('img.octicon.octicon-file, img.color-fg-muted')
                 ;
             aElm_new.forEach(el=>{el.style.cssText = 'display: none'});
-            if(aElm_img){
+            if(aElm_img.length>0){
                 aElm_img.forEach(el=>{el.style.cssText = 'display: inline'});
             }else{
                 aElm_now.forEach(el=>{el.style.cssText = 'display: inline'});
