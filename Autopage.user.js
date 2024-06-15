@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.2
+// @version      6.6.4
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -914,36 +914,6 @@ function: {
                     scrollD: 4000
                 }
             }, //         漫画猫 + 漫画飞
-            imanhuaw: {
-                host: ['www.imanhuaw.net', 'www.imanhuaw.com', 'www.ccshwy.com'],
-                url: ()=> {
-                    if (getCSS('.mh-search-result')) {
-                        curSite = DBSite.imanhuaw_list;
-                    } else if (getCSS('a#zhankai')) {
-                        getCSS('a#zhankai').click();
-                    } else if (indexOF(/\/\d{3,}\.html/)) {
-                        curSite = DBSite.imanhuaw; imanhuaw_init();
-                    }
-                },
-                style: '#sider-left, #sider-right, .main-left, .main-right, .w996.tc, .title > span {display: none !important;} #qTcms_Pic_middle img {max-width: 110%;height: auto;}',
-                pager: {
-                    type: 4,
-                    nextL: imanhuaw_nextL,
-                    insertP: ['#qTcms_Pic_middle img:last-of-type', 4],
-                    insertE: imanhuaw_insertE,
-                    replaceE: '.title h2',
-                    interval: 2000,
-                    scrollD: 3000
-                }
-            }, //          爱漫画 + 188漫画网
-            imanhuaw_list: {
-                blank: 1,
-                pager: {
-                    nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
-                    pageE: 'ul.mh-search-list > li',
-                    replaceE: '.NewPages'
-                }
-            }, //     爱漫画 - 分类页
             hicomic: {
                 host: 'www.hicomic.net',
                 url: ()=> {if (indexOF('/chapters/')) {
@@ -1017,7 +987,7 @@ function: {
                 }
             }, //           Mangabz 漫画
             mangabz_list: {
-                blank: 1,
+                blank: 4,
                 pager: {
                     nextL: '//div[contains(@class,"page-pagination")]//a[contains(text(), ">")]',
                     pageE: 'ul.mh-list > li',
@@ -1069,7 +1039,7 @@ function: {
                 }
             }, //           Xmanhua 漫画
             xmanhua_list: {
-                blank: 1,
+                blank: 4,
                 pager: {
                     nextL: '//div[@class="page-pagination"]//a[contains(text(), ">")]',
                     pageE: 'ul.mh-list > li',
@@ -1492,55 +1462,6 @@ function: {
         }
     }
 
-
-    // [爱漫画] 获取全部图片
-    function imanhuaw_getIMG() {
-        let _img = '', _imgUrl;
-        for (let one of base64_decode(qTcms_S_m_murl_e).split("$qingtiandy$")) {
-            _imgUrl = one;
-            if (one.substring(0,1) == '/') {
-                _imgUrl = qTcms_m_weburl + _imgUrl;
-            } else {
-                if (qTcms_Pic_m_if != '2') {
-                    one = one.replace(/\?/gi, 'a1a1');
-                    one = one.replace(/&/gi, 'b1b1');
-                    one = one.replace(/%/gi, 'c1c1');
-                    let m_httpurl = '';
-                    if (typeof(qTcms_S_m_mhttpurl) != 'undefined') m_httpurl = base64_decode(qTcms_S_m_mhttpurl);
-                    if (location.hostname == 'www.ccshwy.com') qTcms_m_indexurl = 'http://h.ccshwy.com/';
-                    _imgUrl = qTcms_m_indexurl + 'statics/pic/?p=' + escape(one) + '&picid=' + qTcms_S_m_id + '&m_httpurl=' + escape(m_httpurl);
-                } else {
-                    _imgUrl = _imgUrl.replace('http:', '')	;
-                    _imgUrl = _imgUrl.replace('https:', '');
-                }
-            }
-            _img += `<img src="${_imgUrl}">`;
-        }
-        return _img;
-    }
-    // [爱漫画] 初始化（调整本话其余图片）
-    function imanhuaw_init() {
-        getOne(curSite.pager.insertP[0]).outerHTML = imanhuaw_getIMG();
-        document.oncontextmenu = function(){}
-    }
-    // [爱漫画] 获取下一页地址
-    function imanhuaw_nextL() {
-        let next = location.origin + qTcms_Pic_nextArr
-        if (next && next != location.origin && next != curSite.pageUrl) {
-            curSite.pageUrl = next;
-            getPageE_(curSite.pageUrl);
-        }
-    }
-    // [爱漫画] 插入数据
-    function imanhuaw_insertE(pageE, type) {
-        if (!pageE) return
-        // 插入并运行 <script>
-        insScript('//head/script[not(@src)][contains(text(), "qTcms_S_m_murl_e")]', pageE);
-        // 将 img 标签插入到网页中
-        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), imanhuaw_getIMG());
-        addHistory(pageE);
-        pageNumIncrement()
-    }
 
 
     // [HiComic(嗨漫画)] 初始化（将本话其余图片插入网页中）
@@ -2729,8 +2650,8 @@ function: {
     function customRules() {
         if (getCSS('#Autopage_customRules')) return
 
-        let customRules = JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t');
-        if (customRules == '{}') customRules = '{\n\t\n}'; // 引导用户插入规则的位置
+        let customRules = JSON.stringify(GM_getValue('menu_customRules', {}), null, 4);
+        if (customRules == '{}') customRules = '{\n    \n}'; // 引导用户插入规则的位置
         let _html = `<div style="left: 0; right: 0; top: 0; bottom: 0; width: 100%; height: 100%; margin: auto; padding: 25px 10px 10px 10px; position: fixed; opacity: 0.95; z-index: 99999; background-color: #eee; color: #222; font-size: 14px; overflow: scroll; text-align: left;">
 <h3 style="font-size: 22px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><strong># 自定义翻页规则（优先级最高，会覆盖同名的外置翻页规则）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
 <details><summary style="cursor: pointer;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><kbd><strong>「 点击展开 查看规则示例 」（为了避免需要的时候还要找，我干脆把常用规则都一股脑塞进去了）</strong></kbd></summary>
@@ -2804,7 +2725,7 @@ function: {
 }
 </pre></details>
 <details><summary style="cursor: pointer;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><kbd><strong>「 点击展开 查看所有规则 」（可按 Ctrl+F 搜索规则，脚本内置的通用规则因格式限制无法列出）</strong></kbd></summary>
-<pre id="Autopage_customRules_all" style="overflow-y: scroll; overflow-x: hidden; height: 500px; word-break: break-word; white-space: pre-wrap;user-select: auto;"> </pre></details>
+<pre id="Autopage_customRules_all" style="overflow-y: scroll; overflow-x: hidden; height: 500px; word-break: break-all; white-space: pre-wrap;user-select: auto;"> </pre></details>
 
 <textarea id="Autopage_customRules_textarea" style="min-width:95%; min-height:70%; display: block; margin: 10px 0 10px 0; white-space:nowrap; overflow:scroll; resize: auto; text-transform: initial;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间">${customRules}</textarea>
 <button id="Autopage_customRules_save" style="margin-right: 20px;">保存并刷新</button><button id="Autopage_customRules_cancel">取消修改</button>
@@ -2813,7 +2734,7 @@ function: {
         let Autopage_customRules = getCSS('#Autopage_customRules'), shadowRoot = Autopage_customRules.attachShadow({ mode: 'open' }); // 创建一个 Shadow DOM 避免网页样式影响自定义翻页规则元素
         shadowRoot.innerHTML = _html; // 插入元素
         document.documentElement.style.overflow = document.body.style.overflow = 'hidden'; // 避免网页本身滚动
-        getCSS('#Autopage_customRules_all', shadowRoot).textContent = JSON.stringify(DBSite2, null, '\t'); // 单独插入全部规则列表，避免被 insertAdjacentHTML 语义化 HTML 标签
+        getCSS('#Autopage_customRules_all', shadowRoot).textContent = JSON.stringify(DBSite2, null, 4); // 单独插入全部规则列表，避免被 insertAdjacentHTML 语义化 HTML 标签
         //let b=Object.entries(DBSite2)
         //for (var i = 0; i < b.length; i++) {console.log(b[i][0], b[i][1].host);}
         // 点击事件
@@ -2853,7 +2774,7 @@ function: {
                 return
             }
             // 插入网页
-            let _style = `<style>#Autopage_number_button {top: calc(75vh);left: 0;width: 32px;height: 32px;padding: 6px;display: flex;position: fixed;opacity: 0.3;transition: .2s;z-index: 9999;cursor: pointer;user-select: none;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center;transform: translateX(-8px);background-color: #eee;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #aaa;color: #000;font-size: medium;} #Autopage_number_button:hover {opacity: 0.8;transform: translateX(0);}</style>`,
+            let _style = `<style>#Autopage_number_button {top: calc(75vh);left: 0;width: 32px;height: 32px;padding: 6px;display: flex;position: fixed;opacity: 0.3;transition: .2s;z-index: 9999;cursor: pointer;user-select: none;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center;transform: translateX(-8px);background-color: #eee;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #aaa;color: #000;font-size: medium;} @media (any-hover: none) {#Autopage_number_button:active {opacity: 0.8;transform: translateX(0);}}@media (any-hover: hover) {#Autopage_number_button:hover {opacity: 0.8;transform: translateX(0);}}</style>`,
                 _html = `<div id="Autopage_number_button" title="1. 此为【当前页码】（仅指脚本翻了多少页，并非实际页码，该页码可在脚本菜单中关闭）&#10;&#10;2. 鼠标【左键】点击此处可【临时暂停翻页】（再次点击可恢复）&#10;&#10;3. 鼠标【右键】点击此处可【回到顶部】">${pageNum._now}</div>`
 
             document.documentElement.insertAdjacentHTML('beforeend', `<div id="Autopage_number" style="display: flex !important;position: fixed !important;z-index: 9999 !important;"></div>`);
