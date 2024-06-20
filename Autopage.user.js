@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.5
+// @version      6.6.7
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -88,15 +88,7 @@
 
 (function() {
     'use strict';
-    var menuAll = [
-        ['menu_disable', '✅ 已启用 (点击对当前网站禁用)', '❌ 已禁用 (点击对当前网站启用)', []],
-        ['menu_thread', '帖子内自动翻页 (社区类网站)', '帖子内自动翻页 (社区类网站)', true],
-        ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true],
-        ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false],
-        ['menu_history', '添加历史记录+修改地址/标题', '添加历史记录+修改地址/标题', true],
-        ['menu_rules', '更新外置翻页规则 (每天自动)', '更新外置翻页规则 (每天自动)', {}],
-        ['menu_customRules', '自定义翻页规则', '自定义翻页规则', {}]
-    ], urlArr = [ // 外置翻页规则更新地址分流，以确保更新成功率（记得 connect）
+    const urlArr = [ // 外置翻页规则更新地址分流，以确保更新成功率（记得 connect）
         'https://userscript.h233.eu.org/other/Autopage/rules.json',
         'https://bitbucket.org/xiu2/userscript/raw/master/other/Autopage/rules.json',
         'https://raw.kkgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
@@ -129,10 +121,19 @@
         //'https://gh-proxy.com/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json'
     ],
-        loadMoreExclude1 = ['.smzdm.com','stackoverflow.com'],
-        loadMoreExclude2 = ['.steampowered.com','.zcool.com.cn'],
-        menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, DBSite2, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname, scriptHandler;
-    window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, isMobile: isMobile, isUrlC: isUrlC, blank: forceTarget, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextSP: getNextSP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, getSearch: getSearch, getCookie: getCookie, insStyle: insStyle, insScript: insScript, cleanuEvent: cleanuEvent, src_bF: src_bF, xs_bF: xs_bF, pageNumIncrement: pageNumIncrement}
+          loadMoreExclude1 = ['.smzdm.com','stackoverflow.com'],
+          loadMoreExclude2 = ['.steampowered.com','.zcool.com.cn'];
+
+    var menuAll = [
+        ['menu_disable', '✅ 已启用 (点击对当前网站禁用)', '❌ 已禁用 (点击对当前网站启用)', []],
+        ['menu_thread', '帖子内自动翻页 (社区类网站)', '帖子内自动翻页 (社区类网站)', true],
+        ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true],
+        ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false],
+        ['menu_history', '添加历史记录+修改地址/标题', '添加历史记录+修改地址/标题', true],
+        ['menu_rules', '更新外置翻页规则 (每天自动)', '更新外置翻页规则 (每天自动)', {}],
+        ['menu_customRules', '自定义翻页规则', '自定义翻页规则', {}]
+    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, DBSite2, DBSiteNow, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname, scriptHandler;
+    window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, isMobile: isMobile, isUrlC: isUrlC, isPager: isPager, isTitle: isTitle, blank: forceTarget, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextSP: getNextSP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, getSearch: getSearch, getCookie: getCookie, insStyle: insStyle, insScript: insScript, cleanuEvent: cleanuEvent, src_bF: src_bF, xs_bF: xs_bF, pageNumIncrement: pageNumIncrement}
     if (typeof GM_info != 'undefined') {scriptHandler = GM_info.scriptHandler;} else if (typeof GM != 'undefined' && typeof GM.info != 'undefined') {scriptHandler = GM.info.scriptHandler;} else {scriptHandler = '';}
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
@@ -198,8 +199,10 @@
         end:
         for (let now in DBSite) { // 遍历 对象
             if (!DBSite[now].host) continue; // 如果不存在则继续下一个循环
-            // 如果是 数组
 
+            DBSiteNow = DBSite[now] // 供其他函数在 域名/URL 判断阶段使用
+
+            // 如果是 数组
             if (Array.isArray(DBSite[now].host)) {
 
                 for (let i of DBSite[now].host) { // 遍历 数组
@@ -260,6 +263,8 @@
                 }
             }
         }
+
+        DBSiteNow = undefined // 仅限判断阶段使用，判断完成就需要置空
 
         if (support) {
             console.info('[自动无缝翻页] - 独立规则 网站'); return 1;
@@ -2395,6 +2400,7 @@ function: {
     }
     // 插入 <Style>
     function insStyle(style) {
+        if (style.indexOf('{') === -1){style += '{display: none !important;}'}
         document.documentElement.appendChild(document.createElement('style')).textContent = style;
     }
 
@@ -2594,6 +2600,27 @@ function: {
         }
         return false
     }
+    // 判断网站标题是否包含指定文字
+    function isTitle(title) {
+        return document.title.indexOf(title) > -1;
+    }
+    // 判断规则中的 nextL、pageE、insertP、replaceE 元素是否存在于当前网页
+    function isPager(type = 'n,p') {
+        const typeArr = 'n,p'.split(',');
+        for (let i = 0; i < typeArr.length; i++) {
+            switch (typeArr[i]) {
+                case 'n': // nextL
+                    if (!getOne(DBSiteNow.pager.nextL)){return false;}; break;
+                case 'p': // pageE
+                    if (!getOne(DBSiteNow.pager.pageE)){return false;}; break;
+                case 'i': // insertP
+                    if (!getOne(DBSiteNow.pager.insertP[0])){return false;}; break;
+                case 'r': // replaceE
+                    if (!getOne(DBSiteNow.pager.replaceE)){return false;}; break;
+            }
+        }
+        return true;
+    }
     // 获取 Search 指定参数
     function getSearch(variable) {
         let query = window.location.search.substring(1),
@@ -2669,7 +2696,7 @@ function: {
 <pre style="white-space: pre-wrap;user-select: auto;">
 // 下面示例是把所有规则都塞进去了，但实际上大部分都用不上，大多数网站只需要像第一个 "aaa" 这样的规则（replaceE 规则可以省略，脚本会自动判断）
 // "aaa" 是规则名，唯一！如果和 外置规则名 重复，则会将完全覆盖同名的外置规则，支持中文等各种字符
-// "url" 是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站
+// "url" 是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站（如果不知道写什么，那么就写 fun.isPager() 这样脚本会自动匹配当前网站下存在 nextL 及 pageE 元素的网页，大部分网站是没问题的）
 // "replaceE" 省略后将会自动判断是替换 nextL 元素还是 nextL 的父元素（当 nextL 元素后面或前面有 <a> 的相邻兄弟元素时替换其父元素，反之替换其自身，仅限模式1/3/6，且 js 代码除外），值为空 "" 时则完全不替换
 // "scrollD" 是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(注意逗号)，默认 2000）
 
@@ -2713,6 +2740,16 @@ function: {
         "function": {
             "bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])",
             "aF": "document.body.appendChild(document.createElement('script')).textContent = 'xxx'"
+        }
+    },
+    "如果 url 不会写，那就直接写 fun.isPager() 这样脚本会自动匹配当前网站下存在 nextL 及 pageE 元素的网页": {
+        "host": "cccc",
+        "url": "fun.isPager()",
+        "pager": {
+            "nextL": "xxxx",
+            "pageE": "xxxx",
+            "replaceE": "xxxx",
+            "scrollD": 2000
         }
     },
     "这里也可以用中文": {
