@@ -159,8 +159,8 @@
 		}
 	},
 	"360 搜索": {
-		"host": "www.so.com",
-		"url": "/^\\/.+/",
+		"host": ["www.so.com","news.so.com"],
+		"url": "/^\\/(n)?s/",
 		"style": "img {opacity: 1 !important;}",
 		"history": true,
 		"pager": {
@@ -170,37 +170,6 @@
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0,'img[data-isrc]','data-isrc'])"
-		}
-	},
-	"F 搜 - 手机版": {
-		"host": "fsoufsou.com",
-		"url": "return (fun.lp()=='/search' && !fun.indexOF('tbn=images','s') && fun.isMobile())",
-		"pager": {
-			"type": 2,
-			"nextL": ".next-page-container"
-		}
-	},
-	"F 搜": {
-		"host": "fsoufsou.com",
-		"url": "return (fun.lp()=='/search' && !fun.indexOF('tbn=images','s'))",
-		"history": true,
-		"pager": {
-			"type": 6,
-			"nextL": "js;return fun.getNextEP('.turn-page-num-wrap.selected', 'pageIndex=', /pageIndex=\\d+/)",
-			"pageE": ".organic-results>div",
-			"replaceE": ".bottom-pagination",
-			"loadTime": 1000,
-			"scrollD": 3000
-		}
-	},
-	"轻搜": {
-		"host": "www.qingsearch.com",
-		"url": "return (fun.lp() == '/' && fun.indexOF('qings=', 's'))",
-		"pager": {
-			"type": 2,
-			"nextL": "#loadmore>span",
-			"nextText": "加载更多",
-			"scrollD": 3000
 		}
 	},
 	"DuckDuckGo 搜索": {
@@ -262,7 +231,7 @@
 		"host": "search.brave.com",
 		"url": "/^\\/search/",
 		"pager": {
-			"nextL": "id('pagination')/a[./div[contains(@class,'icon-right')]]",
+			"nextL": "#pagination>a:last-child",
 			"pageE": "#results>div:not([id])",
 			"replaceE": "#pagination"
 		}
@@ -283,15 +252,6 @@
 			"nextL": "a[data-test-id=next-button]",
 			"pageE": ".mainline__result-wrapper",
 			"replaceE": ".simplified-pagination"
-		}
-	},
-	"Magi 搜索": {
-		"host": "magi.com",
-		"url": "/^\\/search/",
-		"pager": {
-			"type": 2,
-			"nextL": ".card[data-type='next']",
-			"nextText": "加载更多"
 		}
 	},
 	"ASK 搜索": {
@@ -324,32 +284,8 @@
 		"history": true,
 		"pager": {
 			"nextL": "a.pagination__num--next",
-			"pageE": ".web-google__result",
+			"pageE": ".content-answers-top-wrap, .content-answers-top-wrap~div",
 			"replaceE": ".pagination"
-		}
-	},
-	"Goobe": {
-		"host": "goobe.io",
-		"url": "/^\\/search\\.aspx/",
-		"history": true,
-		"pager": {
-			"nextL": ".PageSelector>.NextPageBTN",
-			"pageE": ".ContentItem",
-			"replaceE": ".PageSelector"
-		}
-	},
-	"萌搜": {
-		"host": "mengso.com",
-		"url": "/^\\/search/",
-		"style": ".res_cell[style*='height:90px']",
-		"history": true,
-		"pager": {
-			"type": 6,
-			"nextL": "#next_page>a, a#next_page_a",
-			"pageE": ".res_cell",
-			"insertP": ["#page_menu_box",1],
-			"replaceE": "#page_menu_box",
-			"loadTime": 1000
 		}
 	},
 	"百度贴吧 - 搜索页": {
@@ -6676,7 +6612,7 @@
 		}
 	},
 	"24FA": {
-		"host": ["/^(www\\.)?24fa\\.[a-z]+$/","/^(www\\.)?24fa.?\\.com$/","/^(www\\.)?\\d{3}w\\.cc$/"],
+		"host": ["/^(www\\.)?24fa\\.[a-z]+$/","/^(www\\.)?24fa.?\\.com$/","/^(www\\.)?\\d{3}w\\.cc$/","/^(www\\.)?\\d{3}\\.(mom|one)$"],
 		"url": "return (fun.isTitle('24FA') && fun.indexOF(/^\\/m?n\\d+/))",
 		"style": ".moreR {display: none;} #content img {width: auto; max-width: 99%; height: auto; display: block; margin: 0 auto;}",
 		"pager": {
