@@ -71,7 +71,7 @@
 			"replaceE": "#b_results>.b_pag, #b_PagAboveFooter"
 		},
 		"function": {
-			"bF": "pageE.forEach(function (one) {fun.getAllCSS('div.rms_iac[data-src]', one).forEach(function (one1) {one1.outerHTML = `<img src=\"${one1.dataset.src}\" height=\"16\" width=\"16\" role=\"presentation\" class=\"rms_img\">`; }) }); return pageE"
+			"bF": "pageE.forEach(function (one) {fun.getAllCSS('div.rms_iac[data-src]', one).forEach(function (one1) {one1.outerHTML = `<img src=\"${one1.dataset.src}\" height=\"32\" width=\"32\" role=\"presentation\" class=\"rms_img\">`; }) }); return pageE"
 		}
 	},
 	"搜狗搜索": {
@@ -493,7 +493,7 @@
 	},
 	"NGA": {
 		"host": ["bbs.nga.cn","ngabbs.com","nga.178.com","g.nga.cn"],
-		"url": "fun.isUrlC(); if(!window.__APPEMBED && !window.cookieInterval){window.cookieInterval = setInterval(()=>{if (!window.__APPEMBED) {document.cookie = 'guestJs=' + fun.getCookie('guestJs').replace(/^\\d+/,parseInt(new Date().getTime()/1000)) + ';domain=' + location.host + ';expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/;samesite=none;secure=false';document.cookie = 'lastvisit=' + parseInt(new Date().getTime()/1000+123) + ';samesite=none;secure=false;domain=' + location.host;};},1000)}; return (fun.lp() == '/thread.php')",
+		"url": "fun.isUrlC(); if(!window.__APPEMBED && !window.cookieInterval){window.cookieInterval = setInterval(()=>{if (!window.__APPEMBED) {document.cookie = 'guestJs=' + fun.getCookie('guestJs').replace(/^\\d+/,parseInt(new Date().getTime()/1000-parseInt(Math.random()*(300-100)+100))) + ';domain=' + location.host + ';expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/;samesite=none;secure=false';document.cookie = 'lastvisit=' + parseInt(new Date().getTime()/1000-parseInt(Math.random()*(100-1)+1)) + ';samesite=none;secure=false;domain=' + location.host;};},10000)}; return (fun.lp() == '/thread.php')",
 		"iframe": true,
 		"gmxhr": true,
 		"pager": {
@@ -2303,43 +2303,27 @@
 		}
 	},
 	"AGE 动漫": {
-		"host": ["/^www\\.agemys\\..+$/","www.age.tv"],
-		"url": "return (fun.indexOF('/catalog/') || fun.lp() == '/search' || fun.lp() == '/recommend' || fun.lp() == '/update')",
+		"host": ["www.agefans.com","www.age.tv","/^www\\.(agedm|agemys)\\./"],
+		"url": "/^\\/(catalog|search|recommend)/",
 		"blank": 3,
 		"pager": {
-			"nextL": "id('container')//div[@class='blockcontent']/div[@style][not(@class)]/li/a[contains(text(), '下一页')]",
-			"pageE": "#container .blockcontent1>div, #container .blockcontent>ul:not(.search-list)>li",
-			"replaceE": "#container .blockcontent>div[style]:not([class])"
+			"nextL": "li.page-item.active+li>a",
+			"pageE": "#cata_video_list .cata_video_item,#recommend_video_wrapper>div>div>div>.position-relative",
+			"replaceE": ".pagination",
+			"forceHTTPS": true
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
-	"AGE 动漫 - 排行榜": {
-		"host": ["/^www\\.agemys\\..+$/","www.age.tv"],
-		"url": "return (fun.lp() == '/rank')",
+	"NT 动漫": {
+		"host": "/^www\\.ntdm\\d\\.com$/",
+		"url": "return fun.isPager()",
 		"blank": 3,
 		"pager": {
-			"nextL": "id('container')/ul[@style][not(@class)]/li/a[contains(text(), '下一页')]",
-			"pageE": "#container>.div_right .blockcontent.div_right_r_3>ul",
-			"replaceE": "#container>ul[style]:not([class])"
-		}
-	},
-	"233 动漫": {
-		"host": "www.dm233.cc",
-		"url": "return (fun.indexOF('/catalog/') || fun.lp() == '/article/' || fun.lp() == '/recommend/' || fun.lp() == '/search')",
-		"blank": 3,
-		"pager": {
-			"nextL": "//div[@class='pagelist']//a[contains(text(), '下一页') or contains(text(), '下一頁')]",
-			"pageE": ".dhnew ul>li, .xgyd ul>li",
-			"replaceE": ".pagelist"
-		}
-	},
-	"233 动漫 - 排行榜": {
-		"host": "www.dm233.cc",
-		"url": "return (fun.lp() == '/rank/')",
-		"blank": 3,
-		"pager": {
-			"nextL": "//div[@class='pagelist']//a[contains(text(), '下一页') or contains(text(), '下一頁')]",
-			"pageE": ".side-update.normal-wai>.normal-nei",
-			"replaceE": ".pagelist"
+			"nextL": "//a[@class='pbutton  asciifont'][text()='下一页']",
+			"pageE": "ul.ul_li_a6>li,.blockcontent1>.cell",
+			"replaceE": "#container>div[style='text-align: center; line-height: 36px;']"
 		}
 	},
 	"anime1": {
