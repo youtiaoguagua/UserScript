@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.3.5
+// @version      2.3.6
 // @author       X.I.U
 // @description  屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容/热榜杂项、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认站外直链...
 // @description:zh-TW  屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、默認高清原圖（無水印）、置頂顯示時間、完整問題時間、區分問題文章、默認站外直鏈...
@@ -1033,7 +1033,7 @@ function removeHighlightLink() {
         for (const mutation of mutationsList) {
             for (const target of mutation.addedNodes) {
                 if (target.nodeType != 1 || target.tagName != 'A') break
-                if (target.dataset.zaNotTrackLink && target.href.indexOf('https://www.zhihu.com/search?q=') > -1) {
+                if (target.dataset.zaNotTrackLink && target.href.indexOf('https://zhida.zhihu.com/search?q=') > -1) {
                     target.parentElement.replaceWith(target.textContent);
                 }
             }
@@ -1043,7 +1043,7 @@ function removeHighlightLink() {
     observer.observe(document, { childList: true, subtree: true });
 
     // 针对的是打开网页后直接加载的前面几个回答（上面哪些是针对动态加载的回答）
-    document.querySelectorAll('span > a[data-za-not-track-link][href^="https://www.zhihu.com/search?q="]').forEach(e => e.parentElement.replaceWith(e.textContent))
+    document.querySelectorAll('span > a[data-za-not-track-link][href^="https://zhida.zhihu.com/search?q="]').forEach(e => e.parentElement.replaceWith(e.textContent))
 }
 
 
