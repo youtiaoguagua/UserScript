@@ -2320,17 +2320,43 @@
 			"replaceE": ".pages"
 		}
 	},
-	"番薯动漫": {
-		"host": ["/^www\\.fanshudm\\.[a-z]+$/","/^www\\.fsdm\\d+\\.[a-z]+$/"],
+	"omofun 动漫": {
+		"host": ["/^omofun[a-z]\\.[a-z]+$/","dilidilidm.com"],
 		"url": "return fun.isPager()",
 		"blank": 3,
 		"pager": {
-			"nextL": ".page-next",
-			"pageE": "a.module-poster-item",
-			"replaceE": "#page"
+			"nextL": "//a[@class='active']/../following-sibling::li[1]/a",
+			"pageE": ".hl-list-item",
+			"replaceE": ".hl-page-wrap"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE,[1,'a[data-original]','data-original'])"
+		}
+	},
+	"NyaFun 动漫": {
+		"host": "www.nyacg.net",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".page-info>a[title='下一页']",
+			"pageE": ".public-list-box",
+			"replaceE": ".pages"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
+		}
+	},
+	"奇米奇米动漫": {
+		"host": "www.qimiqimi.net",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.page_current+a",
+			"pageE": ".img-list>li",
+			"replaceE": ".list-page"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE,[0,'img[original]','original'])"
 		}
 	},
 	"anime1": {
