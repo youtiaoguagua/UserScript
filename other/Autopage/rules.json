@@ -2883,7 +2883,7 @@
 		}
 	},
 	"DL-Raw": {
-		"host": "dl-raw.se",
+		"host": "dl-raw.ac",
 		"url": "/^\\/($|\\?s=|tag|page|category)/",
 		"blank": 3,
 		"pager": {
@@ -5704,6 +5704,16 @@
 		"pager": {
 			"nextL": ".page-item.active+li>a",
 			"pageE": ".content-left>.row.content-row",
+			"replaceE": ".pagination"
+		}
+	},
+	"AVJOY": {
+		"host": "avjoy.me",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".active+li.page-item>a",
+			"pageE": ".content-left>.content-row>div",
 			"replaceE": ".pagination"
 		}
 	},
