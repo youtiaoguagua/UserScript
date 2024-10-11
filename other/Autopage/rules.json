@@ -2311,14 +2311,6 @@
 			"replaceE": "#container>div[style='text-align: center; line-height: 36px;']"
 		}
 	},
-	"子夜动漫/七味网 类通用规则": {
-		"url": "return fun.isPager()",
-		"pager": {
-			"nextL": ".page-active+a",
-			"pageE": ".content-list>li",
-			"replaceE": ".pages"
-		}
-	},
 	"omofun 动漫": {
 		"host": ["/^omofun[a-z]\\.[a-z]+$/","dilidilidm.com"],
 		"url": "return fun.isPager()",
@@ -4901,6 +4893,15 @@
 			"replaceE": "nav.elementor-pagination"
 		}
 	},
+	"中华典藏": {
+		"host": "www.zhonghuadiancang.com",
+		"url": "/\\/\\d+\\.html$/",
+		"pager": {
+			"nextL": "//div[@class='m-page']//button[text()='下一章']/..",
+			"pageE": "#content>p",
+			"replaceE": ".m-page"
+		}
+	},
 	"AfreecaTV": {
 		"host": "www.afreecatv.com",
 		"pager": {
@@ -6780,6 +6781,14 @@
 			"type": 3,
 			"nextL": ".pages>span +a:not(.a1)",
 			"pageE": ".pictures>img,.pic-list>ul",
+			"replaceE": ".pages"
+		}
+	},
+	"子夜动漫/七味网 类通用规则": {
+		"url": "return fun.isPager()",
+		"pager": {
+			"nextL": ".page-active+a",
+			"pageE": ".content-list>li",
 			"replaceE": ".pages"
 		}
 	}
