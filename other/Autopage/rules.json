@@ -4196,6 +4196,17 @@
 			"forceHTTPS": true
 		}
 	},
+	"oop.tw": {
+		"host": "www.oop.tw",
+		"url": "/^\\/areada\\//",
+		"pager": {
+			"type": 6,
+			"nextL": "#next_url",
+			"pageE": "#article>p",
+			"replaceE": ".reading-nav",
+			"scrollD": 5000
+		}
+	},
 	"必读推荐": {
 		"host": "www.bidutuijian.com",
 		"url": "/^\\/books\\/.+\\/(?:(?!0000)\\d{4})\\.html/",
@@ -4377,7 +4388,7 @@
 		"url": "return (fun.lp() == '/' && !location.search)",
 		"pager": {
 			"type": 2,
-			"nextL": ".active .load-more",
+			"nextL": ".gh-load-more>button",
 			"interval": 1000,
 			"scrollD": 4000
 		}
@@ -5793,6 +5804,16 @@
 			"pageE": ".each-project",
 			"replaceE": ".page",
 			"scriptT": 0
+		}
+	},
+	"Hpoi手办维基": {
+		"host": "www.hpoi.net",
+		"url": "/^\\/hobby\\/all/",
+		"pager": {
+			"nextL": "js; return fun.getNextEP('.hpoi-page-active+li:not(.hpoi-pagination-ellipsis)>a, .hpoi-page-active+li.hpoi-pagination-ellipsis+li:not(.hpoi-pagination-ellipsis)>a','page=',/page=\\d+/)",
+			"pageE": ".hpoi-glyphicons-list>li",
+			"replaceE": ".hpoi-pagination",
+			"scrollD": 1000
 		}
 	},
 	"资本市场电子化信息披露平台": {
