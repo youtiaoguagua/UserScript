@@ -1191,6 +1191,16 @@
 			"replaceE": ".pagination:not(#breadcrumb_multipage_popup)"
 		}
 	},
+	"kaspersky 论坛": {
+		"host": "forum.kaspersky.com",
+		"url": "/^\\/forum\\//",
+		"blank": 3,
+		"pager": {
+			"nextL": ".ipsPagination_next>a",
+			"pageE": ".ipsDataItem",
+			"replaceE": "div[data-role=tablePagination]>.ipsPagination"
+		}
+	},
 	"ptt.cc": {
 		"host": "www.ptt.cc",
 		"url": "/^\\/bbs\\/.+\\/index/",
@@ -6158,6 +6168,16 @@
 		"pager": {
 			"nextL": "//div[@class='pages']/a[text()='下一頁']",
 			"pageE": "#main>.t.t2,#main>a[name],#main>form>.t.t2,#main>form>a[name],#main>div[style*='overflow:hidden'],#main>.line",
+			"replaceE": ".pages"
+		}
+	},
+	"2048 论坛": {
+		"host": "hjd2048.com",
+		"url": "/\\/thread\\.php/",
+		"style": "tr[onmouseover]",
+		"pager": {
+			"nextL": ".pages>b+a",
+			"pageE": "#ajaxtable>tbody[style]>tr",
 			"replaceE": ".pages"
 		}
 	},
