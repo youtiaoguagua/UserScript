@@ -3502,7 +3502,7 @@
 		}
 	},
 	"包子漫画": {
-		"host": ["www.czmanga.com","cn.czmanga.com","www.webmota.com","cn.webmota.com","cn.baozimh.com","cn.baozimhcn.com","tw.baozimhcn.com","cn.dzmanga.com","tw.dzmanga.com","www.twmanga.com","www.kukuc.co","cn.kukuc.co"],
+		"host": ["www.baozimh.com","cn.baozimh.com","www.bzmgcn.com","cn.bzmgcn.com","www.czmanga.com","cn.czmanga.com","www.webmota.com","cn.webmota.com","cn.baozimh.com","cn.baozimhcn.com","tw.baozimhcn.com","cn.dzmanga.com","tw.dzmanga.com","www.twmanga.com","www.kukuc.co","cn.kukuc.co","cn.cnbzmg.com","tw.cnbzmg.com"],
 		"url": "if (fun.indexOF('/chapter/')) {return true;} else if (fun.indexOF('/comic/')) {if (fun.getCSS('#button_show_all_chatper')) {fun.getCSS('#button_show_all_chatper').click();}}",
 		"style": "#footer,#header {display: none !important;} .header,.bottom-bar {opacity: 0.3;}",
 		"history": true,
@@ -7649,7 +7649,7 @@
 		}
 	},
 	"凸凹吧 tuao.cc": {
-		"host": "www.tuao.cc",
+		"host": ["www.tuao.cc","www.nnao.cc"],
 		"url": "if(fun.indexOF(/^\\/Articles\\/Content\\//)){let d=document.querySelector('#imgData');if(d&&d.value){let a=d.value.split('|');if(a.length>4){const container=document.getElementById('pageContainer');let i=4;const timer=setInterval(()=>{if(i>=a.length){clearInterval(timer);return};const img=document.createElement('img');img.src=atob(a[i]);container.appendChild(img);i++},1000)};return true};}",
 		"style": "#pagination,body>div:last-of-type,ins",
 		"hiddenPN": true
