@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.5.20
+// @version      1.5.21
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -217,12 +217,12 @@ html[data-theme=light] .AppHeader-notifications:not([aria-label=通知])>div:fir
 @media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Topstory-container {width: 97% !important;}}
 `,
             style_widescreenDisplayQuestion = `/* 宽屏显示 - 问题页 */
-.Question-mainColumn, .ListShortcut, .QuestionWaiting-mainColumn {width: inherit !important;}
+.ListShortcut, .QuestionWaiting-mainColumn {width: inherit !important;}
 .Question-mainColumn+div,[data-za-detail-view-path-module="RightSideBar"], .Question-sideColumn, .GlobalSideBar {display: none !important;}
 .QuestionWaiting-mainColumn {margin-right: 0 !important;}
-.Question-main {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
-@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Question-main {width: auto !important;}}
-@media only screen and (max-width: ${GM_getValue('menu_widescreenDisplayWidth')-100}px) {.Question-main {width: 98.5% !important;}}
+.Question-mainColumn {width: ${GM_getValue('menu_widescreenDisplayWidth')}px; margin: auto!important;}
+@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Question-mainColumn {width: auto !important;}}
+@media only screen and (max-width: ${GM_getValue('menu_widescreenDisplayWidth')-100}px) {.Question-mainColumn {width: 98.5% !important;}}
 .AuthorInfo {max-width: 100% !important;}
 `,
             style_widescreenDisplaySearch = `/* 宽屏显示 - 搜索页 */
@@ -477,7 +477,7 @@ html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
         // 宽屏显示
         if (menu_value('menu_widescreenDisplayIndex')) style += style_widescreenDisplayIndex;
         if (menu_value('menu_widescreenDisplayQuestion') && location.pathname.indexOf('/question/') > -1) style += style_widescreenDisplayQuestion;
-        if (menu_value('menu_widescreenDisplaySearch') && (location.pathname === '/search' || location.pathname.indexOf('/club/') > -1 || location.pathname.indexOf('/topic/') > -1)) style += style_widescreenDisplaySearch;
+        if (menu_value('menu_widescreenDisplaySearch')) style += style_widescreenDisplaySearch;
         if (menu_value('menu_widescreenDisplayCollection') && location.pathname.indexOf('/collection/') > -1) style += style_widescreenDisplayCollection;
         if (menu_value('menu_widescreenDisplayPost') && location.hostname.indexOf('zhuanlan') > -1 && (location.pathname.indexOf('/edit') === -1 || location.pathname.indexOf('/write') === -1)) style += style_widescreenDisplayPost;
         if (menu_value('menu_widescreenDisplayPeople') && location.pathname.indexOf('/people/') > -1) style += style_widescreenDisplayPeople;
@@ -523,7 +523,7 @@ html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
 
     // 获取知乎 Cookie 中的主题类型
     function getTheme() {
-        let name = 'theme=',
+        let name = 'themeApp=',
             ca = document.cookie.split(';');
         for (let i=0; i<ca.length; i++) {
             let c = ca[i].trim();
@@ -536,12 +536,12 @@ html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
     function setTheme(theme) {
         switch(theme) {
             case 'light':
-                document.cookie='theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+                document.cookie='themeApp=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=.zhihu.com';
                 document.lastChild.setAttribute('data-theme', 'light');
                 location.reload(); // 刷新网页
                 break;
             case 'dark':
-                document.cookie='theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';
+                document.cookie='themeApp=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/; domain=.zhihu.com';
                 document.lastChild.setAttribute('data-theme', 'dark');
                 if (GM_getValue('menu_darkMode')) location.reload(); // 刷新网页
                 break;
