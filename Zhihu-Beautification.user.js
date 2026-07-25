@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.5.22
+// @version      1.5.23
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -28,9 +28,9 @@
         ['menu_widescreenDisplay', '宽屏显示', '勾选 = 该页面开启宽屏显示（刷新后查看效果）', ''],
         ['menu_widescreenDisplayIndex', '首页', '宽屏显示', true],
         ['menu_widescreenDisplayQuestion', '问题页', '宽屏显示', true],
-        ['menu_widescreenDisplaySearch', '搜索页、话题页、圈子', '宽屏显示', true],
+        ['menu_widescreenDisplaySearch', '搜索页、话题页', '宽屏显示', true],
         ['menu_widescreenDisplayCollection', '收藏页', '宽屏显示', true],
-        ['menu_widescreenDisplayPost', '文章页', '宽屏显示', false],
+        ['menu_widescreenDisplayPost', '文章页(暂不可用)', '宽屏显示', false],
         ['menu_widescreenDisplayPeople', '用户主页', '用户主页', false],
         ['menu_widescreenDisplayWidth', '宽屏宽度', '宽屏宽度 (默认 1000)', '1000'],
         ['menu_darkMode', '暗黑模式', '暗黑模式', true],
@@ -231,10 +231,10 @@ html[data-theme=light] .AppHeader-notifications:not([aria-label=通知])>div:fir
 .AuthorInfo {max-width: 100% !important;}
 `,
             style_widescreenDisplaySearch = `/* 宽屏显示 - 搜索页 */
-.SearchMain, .ContentLayout-mainColumn, .Club-mainColumn, .Post-mainColumn, [data-za-detail-view-path-module=TopicItem]>div:first-child {width: inherit !important;}
-.SearchMain+div, .ContentLayout-sideColumn, .Card.QuestionHeaderTopicMeta, .ClubSideBar, [data-za-detail-view-path-module=TopicItem]>div:not(:first-child) {display: none !important;}
-.Search-container, .ContentLayout, .Club-container, .Post-container, [data-za-detail-view-path-module=TopicItem] {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
-@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Search-container, .ContentLayout, .Club-container, .Post-container, [data-za-detail-view-path-module=TopicItem] {width: 97.5% !important;}}
+.SearchMain, .App-main>[data-za-detail-view-path-module=TopicItem]>div:first-child {width: inherit !important;}
+.SearchMain+div,  .App-main>[data-za-detail-view-path-module=TopicItem]>div:not(:first-child) {display: none !important;}
+.Search-container, .App-main>[data-za-detail-view-path-module=TopicItem] {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
+@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Search-container, .App-main>[data-za-detail-view-path-module=TopicItem] {width: 97.5% !important;}}
 `,
             style_widescreenDisplayCollection = `/* 宽屏显示 - 收藏页 */
 .CollectionsDetailPage-mainColumn {width: inherit !important;}
