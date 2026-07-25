@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.5.21
+// @version      1.5.22
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -13,6 +13,7 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_notification
+// @grant        window.onurlchange
 // @sandbox      JavaScript
 // @license      GPL-3.0 License
 // @run-at       document-start
@@ -43,7 +44,11 @@
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
     }
     registerMenuCommand();
+    if (window.onurlchange === undefined) {addUrlChangeEvent();} // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
     addStyle();
+    window.addEventListener('urlchange', function(){ // 网页 URL 动态变化后再次执行（针对在任何页面搜索时）
+        if (menu_value('menu_widescreenDisplaySearch') && (location.pathname === '/search' || location.pathname.indexOf('/club/') > -1 || location.pathname.indexOf('/topic/') > -1)) {addStyle()};
+    })
     // 向下翻时自动隐藏顶栏
     if (menu_value('menu_hideTitle')) setTimeout(hideTitle, 2000);
 
@@ -217,12 +222,12 @@ html[data-theme=light] .AppHeader-notifications:not([aria-label=通知])>div:fir
 @media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Topstory-container {width: 97% !important;}}
 `,
             style_widescreenDisplayQuestion = `/* 宽屏显示 - 问题页 */
-.ListShortcut, .QuestionWaiting-mainColumn {width: inherit !important;}
+.QuestionWaiting-mainColumn {width: inherit !important;}
 .Question-mainColumn+div,[data-za-detail-view-path-module="RightSideBar"], .Question-sideColumn, .GlobalSideBar {display: none !important;}
 .QuestionWaiting-mainColumn {margin-right: 0 !important;}
-.Question-mainColumn {width: ${GM_getValue('menu_widescreenDisplayWidth')}px; margin: auto!important;}
-@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Question-mainColumn {width: auto !important;}}
-@media only screen and (max-width: ${GM_getValue('menu_widescreenDisplayWidth')-100}px) {.Question-mainColumn {width: 98.5% !important;}}
+.Question-mainColumn, .ListShortcut {width: ${GM_getValue('menu_widescreenDisplayWidth')}px; margin: auto!important;}
+@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Question-mainColumn, .ListShortcut {width: auto !important;}}
+@media only screen and (max-width: ${GM_getValue('menu_widescreenDisplayWidth')-100}px) {.Question-mainColumn, .ListShortcut {width: 98.5% !important;}}
 .AuthorInfo {max-width: 100% !important;}
 `,
             style_widescreenDisplaySearch = `/* 宽屏显示 - 搜索页 */
@@ -477,7 +482,7 @@ html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
         // 宽屏显示
         if (menu_value('menu_widescreenDisplayIndex')) style += style_widescreenDisplayIndex;
         if (menu_value('menu_widescreenDisplayQuestion') && location.pathname.indexOf('/question/') > -1) style += style_widescreenDisplayQuestion;
-        if (menu_value('menu_widescreenDisplaySearch')) style += style_widescreenDisplaySearch;
+        if (menu_value('menu_widescreenDisplaySearch') && (location.pathname === '/search' || location.pathname.indexOf('/club/') > -1 || location.pathname.indexOf('/topic/') > -1)) style += style_widescreenDisplaySearch;
         if (menu_value('menu_widescreenDisplayCollection') && location.pathname.indexOf('/collection/') > -1) style += style_widescreenDisplayCollection;
         if (menu_value('menu_widescreenDisplayPost') && location.hostname.indexOf('zhuanlan') > -1 && (location.pathname.indexOf('/edit') === -1 || location.pathname.indexOf('/write') === -1)) style += style_widescreenDisplayPost;
         if (menu_value('menu_widescreenDisplayPeople') && location.pathname.indexOf('/people/') > -1) style += style_widescreenDisplayPeople;
@@ -546,5 +551,27 @@ html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
                 if (GM_getValue('menu_darkMode')) location.reload(); // 刷新网页
                 break;
         }
+    }
+
+
+    // 自定义 urlchange 事件（用来监听 URL 变化）
+    function addUrlChangeEvent() {
+        history.pushState = ( f => function pushState(){
+            var ret = f.apply(this, arguments);
+            window.dispatchEvent(new Event('pushstate'));
+            window.dispatchEvent(new Event('urlchange'));
+            return ret;
+        })(history.pushState);
+
+        history.replaceState = ( f => function replaceState(){
+            var ret = f.apply(this, arguments);
+            window.dispatchEvent(new Event('replacestate'));
+            window.dispatchEvent(new Event('urlchange'));
+            return ret;
+        })(history.replaceState);
+
+        window.addEventListener('popstate',()=>{
+            window.dispatchEvent(new Event('urlchange'))
+        });
     }
 })();
